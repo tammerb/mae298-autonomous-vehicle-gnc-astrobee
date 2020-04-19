@@ -1,0 +1,7 @@
+version: '2'
+services:
+  os:
+    image: myubuntu16
+    stdin_open: true
+    tty: true
+    build: .
