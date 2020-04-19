@@ -1,7 +1,11 @@
 FROM ubuntu:xenial
 MAINTAINER Tammer Barkouki (thbarkouki@ucdavis.edu)
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y build-essential git && apt-get install -y sudo wget nano && mkdir freeflyer
+RUN apt-get update && apt-get upgrade -y \
+&& apt-get install -y build-essential git \
+&& apt-get install -y sudo wget nano \
+&& mkdir $HOME/freeflyer
 
-WORKDIR /freeflyer
-RUN touch astrtest
+WORKDIR $HOME/freeflyer
+RUN export SOURCE_PATH=$HOME/freeflyer \
+&& git clone https://github.com/nasa/astrobee.git $SOURCE_PATH
