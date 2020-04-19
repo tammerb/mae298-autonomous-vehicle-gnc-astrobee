@@ -1,4 +1,4 @@
 #!/bin/bash
 
 docker-compose up -d
-docker exec -d dockertest_os_1 touch test11.txt
+docker exec -d astrobee_container touch test11.txt
