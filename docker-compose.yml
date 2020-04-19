@@ -2,6 +2,7 @@ version: '2'
 services:
   os:
     image: myubuntu16
+    container_name: astrobee_container
     stdin_open: true
     tty: true
     build: .
