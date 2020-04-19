@@ -1,8 +1,26 @@
 version: '2'
 services:
   os:
-    image: myubuntu16
-    container_name: astrobee_container
+    image: thbarkouki/astrobee:built
+    container_name: astrobee_sim_container
     stdin_open: true
     tty: true
-    build: .
+    environment:
+      - DISPLAY=novnc:0.0
+    depends_on:
+      - novnc
+    networks:
+      - x11
+  novnc:
+    image: theasp/novnc:latest
+    environment:
+      # Adjust to your screen size
+      - DISPLAY_WIDTH=1920
+      - DISPLAY_HEIGHT=1080
+      - RUN_XTERM=no
+    ports:
+      - "8080:8080"
+    networks:
+      - x11
+networks:
+  x11:
