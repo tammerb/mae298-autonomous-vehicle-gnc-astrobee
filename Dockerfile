@@ -18,4 +18,10 @@ RUN apt-get update && apt-get upgrade -y \
 && ./install_desktop_16_04_packages.sh \
 && sudo rosdep init \
 && rosdep update \
+&& cd $SOURCE_PATH \
+&& export BUILD_PATH=$HOME/freeflyer_build/native \
+&& export INSTALL_PATH=$HOME/freeflyer_install/native \
+&& ./scripts/configure.sh -l -F -D \
+&& cd $BUILD_PATH \
+&& make -j2 \
 && cd $SOURCE_PATH
