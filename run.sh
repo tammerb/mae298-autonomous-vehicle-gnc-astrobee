@@ -1,4 +1,4 @@
 #!/bin/bash
 
 docker-compose up -d
-docker exec -d dockertest_os_1 touch test11.txt
+docker exec -d astrobee_container $HOME/freeflyer_build/native $$ source devel/setup.bash && roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true
