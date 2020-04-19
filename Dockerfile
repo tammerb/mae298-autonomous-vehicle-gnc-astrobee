@@ -8,7 +8,7 @@ RUN apt-get update && apt-get upgrade -y \
 && export SOURCE_PATH=$HOME/myfreeflyer \
 && git clone https://github.com/nasa/astrobee.git $SOURCE_PATH \
 && cd $SOURCE_PATH/scripts/setup \
-&& ./add_ros_repository.sh
+&& ./add_ros_repository.sh \
 && sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/gazebo-stable.list \
 && sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/ros-latest.list \
 && apt-get update \
