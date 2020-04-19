@@ -7,4 +7,9 @@ RUN apt-get update && apt-get upgrade -y \
 && mkdir $HOME/myfreeflyer
 
 RUN export SOURCE_PATH=$HOME/myfreeflyer \
-&& git clone https://github.com/nasa/astrobee.git $SOURCE_PATH
+&& git clone https://github.com/nasa/astrobee.git $SOURCE_PATH \
+&& pushd $SOURCE_PATH \
+&&cd scripts/setup \
+&& ./add_ros_repository.sh \
+&& sudo apt-get update \
+&& cd debians
