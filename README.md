@@ -9,7 +9,7 @@ Clone this repo and `cd` into it:
 ` `
 `cd ros-astrobee/`
 
-Pull the pre-built *astrobee* Docker image:
+Pull the pre-built *astrobee* Docker image (*note: the image is 1.7GB*):
 `docker pull thbarkouki/astrobee:built`
 
 and check with `docker images`
