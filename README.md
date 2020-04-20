@@ -22,18 +22,21 @@ Check that the pull was successful with the `docker images` command.
 ### Running on a Linux host:
 Run the simulator with
 ```
-source run.sh
+./run.sh
+```
+
+*Note: If you get a "Got permission denied while trying to connect to the Docker daemon socket..." error, execute the script with `sudo`
+```
+sudo ./run.sh
 ```
 A browser tab should automatically open at http://localhost:8080/vnc_auto.html
 Once you're done, stop and remove both containers with `docker-compose down`.
 
 ### Running on a Windows host (tested with git for Windows: https://gitforwindows.org/):
-Run with
+Same as above for linux but with the following script
 ```
-source runwin.sh
+./runwin.sh
 ```
-A browser tab should automatically open at http://localhost:8080/vnc_auto.html
-Once you're done, stop and remove both containers with `docker-compose down`.
 
 ### Flying Astrobee: TELEOP
 Enter the docker container and source the ros commands with
