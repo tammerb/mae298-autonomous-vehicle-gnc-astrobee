@@ -1,11 +1,12 @@
 FROM ubuntu:xenial
 MAINTAINER Tammer Barkouki (thbarkouki@ucdavis.edu)
 
-#apt-get upgrade isn't great practice in a dockerfile because it's bloating, but we'll keep it for now.
+# apt-get upgrade isn't great practice in a dockerfile because it's bloating, but we'll keep it for now.
 RUN apt-get update && apt-get upgrade -y \
-&& apt-get install -y build-essential git sudo wget nano
 
-RUN mkdir $HOME/myfreeflyer
+# Put this on a seperate line so we can install things we miss without having to re-do everything
+RUN apt-get update \
+&& apt-get install -y build-essential git sudo wget nano lsb_release
 
 WORKDIR $HOME/myfreeflyer
 
