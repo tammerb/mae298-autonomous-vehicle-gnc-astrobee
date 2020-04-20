@@ -6,7 +6,7 @@ RUN apt-get update && apt-get upgrade -y \
 
 # Put this on a seperate line so we can install things we miss without having to re-do everything
 RUN apt-get update \
-&& apt-get install -y build-essential git sudo wget nano lsb_release
+&& apt-get install -y build-essential git sudo wget nano lsb-release
 
 WORKDIR $HOME/myfreeflyer
 
