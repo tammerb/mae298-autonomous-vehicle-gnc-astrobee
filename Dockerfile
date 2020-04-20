@@ -1,27 +1,36 @@
 FROM ubuntu:xenial
 MAINTAINER Tammer Barkouki (thbarkouki@ucdavis.edu)
 
-RUN apt-get update && apt-get upgrade -y \
-&& apt-get install -y build-essential git \
-&& apt-get install -y sudo wget nano \
-&& mkdir $HOME/myfreeflyer \
-&& export SOURCE_PATH=$HOME/myfreeflyer \
-&& git clone https://github.com/nasa/astrobee.git $SOURCE_PATH \
-&& cd $SOURCE_PATH/scripts/setup \
-&& ./add_ros_repository.sh \
-&& sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/gazebo-stable.list \
-&& sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/ros-latest.list \
-&& apt-get update \
-&& cd debians \
-&& ./build_install_debians.sh \
-&& cd ../ \
-&& ./install_desktop_16_04_packages.sh \
-&& sudo rosdep init \
+# apt-get upgrade isn't great practice in a dockerfile because it's bloating, but we'll keep it for now.
+RUN apt-get update && apt-get upgrade -y
+
+# Put this on a seperate line so we can install things we miss without having to re-do everything
+RUN apt-get update \
+&& apt-get install -y build-essential git sudo wget nano lsb-release
+
+# Get Astrobee
+RUN git clone https://github.com/nasa/astrobee.git
+
+WORKDIR $HOME/astrobee
+
+# update apt lists and install ROS
+RUN ./scripts/setup/add_ros_repository.sh
+
+# You have to be in the directory to run this script because a variable assigns `pwd`...disgusting
+RUN apt-get update \
+&& cd scripts/setup/debians \
+&& ./build_install_debians.sh
+
+RUN apt-get update \
+&& ./scripts/setup/install_desktop_16_04_packages.sh
+
+# Update ROS, get ready for build
+RUN sudo rosdep init \
 && rosdep update \
-&& cd $SOURCE_PATH \
-&& export BUILD_PATH=$HOME/freeflyer_build/native \
-&& export INSTALL_PATH=$HOME/freeflyer_install/native \
-&& ./scripts/configure.sh -l -F -D \
-&& cd $BUILD_PATH \
-&& make -j2 \
-&& cd $SOURCE_PATH
+&& ./scripts/configure.sh -l -F -D
+
+# Finally build!
+RUN cd $HOME/freeflyer_build/native \
+&& make -j$((`nproc`+1))
+
+RUN echo "source /root/freeflyer_build/native/devel/setup.bash" >> /root/.bashrc
