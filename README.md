@@ -29,8 +29,8 @@ Run the simulator with
 ```
 sudo ./run.sh
 ```
-A browser tab should automatically open at http://localhost:8080/vnc_auto.html
-Once you're done, stop and remove both containers with `docker-compose down`.
+A browser tab should automatically open at http://localhost:8080/vnc_auto.html. If not, manually enter this address into your browser.
+See below for **Flying Astrobee** instructions. Once you're done, stop and remove both containers with `docker-compose down`.
 
 ### Running on a Windows host (tested with git for Windows: https://gitforwindows.org/):
 Same as above for linux but with the following script
@@ -39,7 +39,7 @@ Same as above for linux but with the following script
 ```
 
 ### Flying Astrobee: TELEOP
-Enter the docker container and source the ros commands with
+In a new terminal from the one you launched the sim from, enter ("attach to") the docker container and source the ros commands with
 ```
 docker attach astrobee_sim_container
 source /root/freeflyer_build/native/devel/setup.bash
