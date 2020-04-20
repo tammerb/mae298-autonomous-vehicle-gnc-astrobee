@@ -22,5 +22,5 @@ RUN apt-get update && apt-get upgrade -y \
 && export INSTALL_PATH=$HOME/freeflyer_install/native \
 && ./scripts/configure.sh -l -F -D \
 && cd $BUILD_PATH \
-&& make -j2 \
+&& make -j8 \
 && cd $SOURCE_PATH
