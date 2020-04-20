@@ -17,12 +17,15 @@ RUN git clone https://github.com/nasa/astrobee.git
 RUN ./scripts/setup/add_ros_repository.sh \
 && sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/gazebo-stable.list \
 && sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/ros-latest.list \
-&& apt-get update \
-&& cd debians \
-&& ./build_install_debians.sh \
-&& cd ../ \
-&& ./install_desktop_16_04_packages.sh \
-&& sudo rosdep init \
+# do we need an upgrade after update? is that in a script?
+&& apt-get update 
+
+# Not yet sure what these do (see just above)
+RUN ./debians/build_install_debians.sh \
+&& ./install_desktop_16_04_packages.sh
+
+# Update ROS
+RUN sudo rosdep init \
 && rosdep update \
 && cd $SOURCE_PATH \
 && export BUILD_PATH=$HOME/freeflyer_build/native \
