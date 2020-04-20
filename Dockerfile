@@ -1,14 +1,13 @@
 FROM ubuntu:xenial
 MAINTAINER Tammer Barkouki (thbarkouki@ucdavis.edu)
 
+#apt-get upgrade isn't great practice in a dockerfile because it's bloating, but we'll keep it for now.
 RUN apt-get update && apt-get upgrade -y \
 && apt-get install -y build-essential git sudo wget nano
 
 RUN mkdir $HOME/myfreeflyer
 
 WORKDIR $HOME/myfreeflyer
-
-ENV SOURCE_PATH $HOME/myfreeflyer \
 
 # Get Astrobee
 RUN git clone https://github.com/nasa/astrobee.git
@@ -24,10 +23,11 @@ RUN ./scripts/setup/add_ros_repository.sh \
 RUN ./debians/build_install_debians.sh \
 && ./install_desktop_16_04_packages.sh
 
-# Update ROS
+# Update ROS, get ready for build
 RUN sudo rosdep init \
 && rosdep update \
 && ./scripts/configure.sh -l -F -D
 
+# Finally build!
 RUN cd $HOME/freeflyer_build/native \
-&& make -j8
+&& make -j$((`nproc`+1))
