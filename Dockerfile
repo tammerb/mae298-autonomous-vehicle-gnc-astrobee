@@ -27,10 +27,7 @@ RUN ./debians/build_install_debians.sh \
 # Update ROS
 RUN sudo rosdep init \
 && rosdep update \
-&& cd $SOURCE_PATH \
-&& export BUILD_PATH=$HOME/freeflyer_build/native \
-&& export INSTALL_PATH=$HOME/freeflyer_install/native \
-&& ./scripts/configure.sh -l -F -D \
-&& cd $BUILD_PATH \
-&& make -j8 \
-&& cd $SOURCE_PATH
+&& ./scripts/configure.sh -l -F -D
+
+RUN cd $HOME/freeflyer_build/native \
+&& make -j8
