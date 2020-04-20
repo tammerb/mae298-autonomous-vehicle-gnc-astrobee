@@ -8,21 +8,21 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get update \
 && apt-get install -y build-essential git sudo wget nano lsb-release
 
-WORKDIR $HOME/myfreeflyer
-
 # Get Astrobee
 RUN git clone https://github.com/nasa/astrobee.git
+
+WORKDIR $HOME/astrobee
 
 # update apt lists and install ROS
 RUN ./scripts/setup/add_ros_repository.sh
 
-# Not yet sure what these do (see just above), you have to be in the directory to run this script because a variable assings `pwd`...disgusting
-RUN cd scripts/setup/debians \
+# You have to be in the directory to run this script because a variable assigns `pwd`...disgusting
+RUN apt-get update \
+&& cd scripts/setup/debians \
 && ./build_install_debians.sh
 
-# Not yet sure what these do (see just above)
-RUN ./debians/build_install_debians.sh \
-&& ./install_desktop_16_04_packages.sh
+RUN apt-get update \
+&& ./scripts/setup/install_desktop_16_04_packages.sh
 
 # Update ROS, get ready for build
 RUN sudo rosdep init \
