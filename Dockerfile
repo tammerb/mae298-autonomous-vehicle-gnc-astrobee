@@ -11,8 +11,7 @@ WORKDIR $HOME/myfreeflyer
 ENV SOURCE_PATH $HOME/myfreeflyer \
 
 # Get Astrobee
-RUN git clone https://github.com/nasa/astrobee.git \
-&& ./scripts/setup/add_ros_repository.sh
+RUN git clone https://github.com/nasa/astrobee.git
 
 # get ROS
 && sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/gazebo-stable.list \
