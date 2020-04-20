@@ -14,11 +14,11 @@ WORKDIR $HOME/myfreeflyer
 RUN git clone https://github.com/nasa/astrobee.git
 
 # update apt lists and install ROS
-RUN ./scripts/setup/add_ros_repository.sh \
-&& sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/gazebo-stable.list \
-&& sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/ros-latest.list \
-# do we need an upgrade after update? is that in a script?
-&& apt-get update 
+RUN ./scripts/setup/add_ros_repository.sh
+
+# Not yet sure what these do (see just above), you have to be in the directory to run this script because a variable assings `pwd`...disgusting
+RUN cd scripts/setup/debians \
+&& ./build_install_debians.sh
 
 # Not yet sure what these do (see just above)
 RUN ./debians/build_install_debians.sh \
