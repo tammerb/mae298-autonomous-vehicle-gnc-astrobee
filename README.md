@@ -1,7 +1,7 @@
 # ros-astrobee
 
 ### Instructions just to get started with a prebuilt astrobee sim:
-
+ 
 Install docker for your OS and check with `docker version`
 
 Clone this repo and `cd` into it:
@@ -9,7 +9,7 @@ Clone this repo and `cd` into it:
 ` `
 `cd ros-astrobee/`
 
-Pull the pre-built Astrobee Docker image:
+Pull the pre-built *astrobee* Docker image:
 `docker pull thbarkouki/astrobee:built`
 
 and check with `docker images`
