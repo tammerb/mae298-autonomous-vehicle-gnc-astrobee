@@ -25,7 +25,7 @@ Run the simulator with
 ./run.sh
 ```
 
-*Note: If you get a "Got permission denied while trying to connect to the Docker daemon socket..." error, execute the script with `sudo`
+*Note: If you get a "Got permission denied while trying to connect to the Docker daemon socket..." error, execute the script with `sudo`*
 ```
 sudo ./run.sh
 ```
