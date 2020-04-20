@@ -13,7 +13,8 @@ ENV SOURCE_PATH $HOME/myfreeflyer \
 # Get Astrobee
 RUN git clone https://github.com/nasa/astrobee.git
 
-# get ROS
+# update apt lists and install ROS
+RUN ./scripts/setup/add_ros_repository.sh \
 && sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/gazebo-stable.list \
 && sed -i 's/main/xenial main/g' /etc/apt/sources.list.d/ros-latest.list \
 && apt-get update \
