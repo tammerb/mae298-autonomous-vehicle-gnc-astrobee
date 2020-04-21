@@ -1,6 +1,8 @@
 # ros-astrobee
+#### A Docker Image and run scripts for NASA's Astrobee Robot Software
+(Astrobee source code available at https://github.com/nasa/astrobee/tree/972b78b6651e87a634f7ae99a3b12aea860053f1)
 
-## Instructions to get started with a prebuilt astrobee sim:
+## Instructions to get started with a prebuilt Astrobee sim:
  
 Install docker for your OS and check with `docker version`
 *(If running on a Windows 10 host, start your Docker desktop.)*
