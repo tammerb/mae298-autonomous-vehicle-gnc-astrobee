@@ -31,6 +31,6 @@ RUN sudo rosdep init \
 
 # Finally build!
 RUN cd $HOME/freeflyer_build/native \
-&& make -j$((`nproc`+1))
+&& make -j 4
 
 RUN echo "source /root/freeflyer_build/native/devel/setup.bash" >> /root/.bashrc
