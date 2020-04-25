@@ -10,8 +10,12 @@ docker exec -d astrobee_sim_container /bin/bash -c "source /root/freeflyer_build
 
 echo "Standby. Opening browser interface..."
 
-sleep 3
+sleep 1
 
-xdg-open http://localhost:8080/vnc_auto.html & 2>/dev/null
-open http://localhost:8080/vnc_auto.html & 2>/dev/null
-start http://localhost:8080/vnc_auto.html & 2>/dev/null
+echo "If browser opens, ignore the 'Command not found error' "
+
+sleep 1
+
+xdg-open http://localhost:8080/vnc_auto.html &
+open http://localhost:8080/vnc_auto.html &
+start http://localhost:8080/vnc_auto.html &
