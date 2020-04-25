@@ -21,27 +21,34 @@ docker pull thbarkouki/astrobee:built
 
 Check that the pull was successful with the `docker images` command.
 
-### Running on a Linux host:
-Run the simulator with
+### Run the Simulator (*testing* a script that runs on Windows 10, Linux, and Mac OS):
+Run the simulator with:
 ```
 ./run.sh
 ```
+*Depending on your OS, you may see some `... command not found` errors. You can ignore these.*
 
+A browser tab should automatically open at http://localhost:8080/vnc_auto.html. If not, manually enter this address into your browser.
+See below for **Flying Astrobee** instructions. Once you're done, close the browsers tab, exit the terminal you're controlling the Astrobee from with `exit`, and stop and remove both containers with `docker-compose down` in the original terminal you started in.
+
+#### Running on a Linux host:
+Run the simulator with
+```
+./rununix.sh
+```
 *Note: If you get a "Got permission denied while trying to connect to the Docker daemon socket..." error, execute the script with `sudo`*
 ```
-sudo ./run.sh
+sudo ./rununix.sh
 ```
-A browser tab should automatically open at http://localhost:8080/vnc_auto.html. If not, manually enter this address into your browser.
-See below for **Flying Astrobee** instructions. Once you're done, stop and remove both containers with `docker-compose down`.
 
-### Running on a Windows host (tested with git for Windows: https://gitforwindows.org/):
-Same as above for linux but with the following script
+#### Running on a Windows host (tested with git for Windows: https://gitforwindows.org/):
+Same as above for linux but run the following script instead:
 ```
 ./runwin.sh
 ```
 
 ### Flying Astrobee: TELEOP
-In a new terminal from the one you launched the sim from, enter ("attach to") the docker container and source the ros commands with
+In a new terminal from the one you launched the sim from, enter (aka attach to) the docker container and source the ros commands with:
 ```
 docker attach astrobee_sim_container
 source /root/freeflyer_build/native/devel/setup.bash
