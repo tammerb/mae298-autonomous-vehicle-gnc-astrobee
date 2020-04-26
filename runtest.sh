@@ -15,6 +15,7 @@ do
     echo "Nav and Dock cams will be on."
     ;;
     *)
+    echo "Incorrect flag, use '-c' flag to turn cameras on."
     ;;
   esac
 done
@@ -26,8 +27,8 @@ docker exec -d astrobee_sim_container /bin/bash -c "source $SETUP \
 
 echo "Opening browser interface..."
 
-sleep 3
+sleep 2
 
-xdg-open http://localhost:8080/vnc_auto.html &
-open http://localhost:8080/vnc_auto.html &
-start http://localhost:8080/vnc_auto.html &
+xdg-open http://localhost:8080/vnc_auto.html \
+|| start http://localhost:8080/vnc_auto.html \
+|| open http://localhost:8080/vnc_auto.html
