@@ -4,11 +4,12 @@ docker container stop $(docker container ls -aq)
 
 docker-compose up -d
 
-docker exec -d astrobee_sim_container /bin/bash -c "source /root/freeflyer_build/native/devel/setup.bash" \
-&& roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true || winpty docker exec -d astrobee_sim_container //bin//bash -c "source /root/freeflyer_build/native/devel/setup.bash" \
-&& roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true
+docker exec -d astrobee_sim_container /bin/bash -c \
+"source /root/freeflyer_build/native/devel/setup.bash && roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true" \
+|| winpty docker exec -d astrobee_sim_container //bin//bash -c \
+"source /root/freeflyer_build/native/devel/setup.bash && roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true"
 
-echo "Standby." Opening browser interface. This may throw some 'command not found errors'..."
+echo "Standby. Opening browser interface. This may throw some 'command not found errors'..."
 
 sleep 2
 
