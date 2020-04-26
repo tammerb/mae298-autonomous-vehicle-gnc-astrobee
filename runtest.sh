@@ -9,13 +9,12 @@ docker-compose up -d
 for arg in "$@"
 do
   case $arg in
-    -cam)
+    -c)
     docker exec -d astrobee_sim_container /bin/bash -c "sed -i 's/nav_cam_rate = 0.0/nav_cam_rate = 1.0/' $CAM_CONFIG \
     && sed -i 's/dock_cam_rate = 0.0/doc_cam_rate = 1.0/' $CAM_CONFIG"
-    echo "Nav and Dock cams will be on at 1Hz"
+    echo "Nav and Dock cams will be on."
     ;;
     *)
-    echo "Nav and Dock cams will be off"
     ;;
   esac
 done
