@@ -5,7 +5,7 @@
 ## Instructions to get started with a prebuilt Astrobee sim:
  
 Install docker for your OS and check with `docker version`
-*(If running on a Windows 10 host, start your Docker desktop.)*
+*(If not running in Linux, start your Docker desktop.)*
 
 Clone this repo and `cd` into it:
 ```
@@ -14,38 +14,26 @@ cd ros-astrobee/
 ```
 
 ### Pull the Docker image
-Pull the pre-built Docker image (*note: the compressed image is 1.7GB and 6GB once extracted*):
+Pull the pre-built Docker image (*note: the compressed image is ~1.5GB and 6GB once extracted*):
 ```
 docker pull thbarkouki/astrobee:built
 ```
 
 Check that the pull was successful with the `docker images` command.
 
-### Run the Simulator (*testing* a script that runs on Windows 10, Linux, and Mac OS):
-Run the simulator with:
+### Run the Simulator:
+Run the simulator with by executing the `run.sh` script, e.g with:
 ```
 ./run.sh
 ```
-*Depending on your OS, you may see some `... command not found` errors. You can ignore these.*
+(maybe require `sudo`)
+
+The NavCam and DockCam views are off by default. Add the `-c` flag to turn them on for debugging (resource intensive). 
 
 A browser tab should automatically open at http://localhost:8080/vnc_auto.html. If not, manually enter this address into your browser.
-See below for **Flying Astrobee** instructions. Once you're done, close the browsers tab, exit the terminal you're controlling the Astrobee from with `exit`, and stop and remove both containers with `docker-compose down` in the original terminal you started in.
+See below for **Flying Astrobee** instructions.
 
-#### Running on a Linux host:
-Run the simulator with
-```
-./rununix.sh
-```
-*Note: If you get a "Got permission denied while trying to connect to the Docker daemon socket..." error, execute the script with `sudo`*
-```
-sudo ./rununix.sh
-```
-
-#### Running on a Windows host (tested with git for Windows: https://gitforwindows.org/):
-Same as above for linux but run the following script instead:
-```
-./runwin.sh
-```
+Once you're done, close the browsers tab, exit the terminal you're controlling the Astrobee from with `exit`, and stop and remove both containers with `docker-compose down` in the original terminal you started in.
 
 ### Flying Astrobee: TELEOP
 In a new terminal from the one you launched the sim from, enter (aka attach to) the docker container and source the ros commands with:
@@ -56,8 +44,8 @@ source /root/freeflyer_build/native/devel/setup.bash
 Now you should be able to "tele-operate" the astrobee using the teleop instructions available from the original Astrobee repo here:
 https://github.com/nasa/astrobee/blob/972b78b6651e87a634f7ae99a3b12aea860053f1/management/executive/teleop_tool.md
 
-#### *For testing only:* To install the sim and start the containers, but not launch the sim (this will also do the `pull` step above if not already done):
-Run `install.sh`. This will start both the astrobee and noVNC containers, but will not launch the sim. You can open a second terminal and attach to the sim container by running `docker attach astrobee_sim_container`. You can then edit and launch the sim from inside. Exit the container with `exit`, and stop and remove both containers with `docker-compose down`.
+#### *For testing only:* This will start the containers (and install the image if needed), but not launch the sim:
+Run `run_no_launch.sh`. This will start both the astrobee and noVNC containers, but will not launch the sim. You can open a second terminal and attach to the sim container by running `docker attach astrobee_sim_container`. You can then edit and launch the sim from inside. Exit the container with `exit`, and stop and remove both containers with `docker-compose down`.
 
 ## Instructions to build an astrobee simulator:
 *coming soon*
