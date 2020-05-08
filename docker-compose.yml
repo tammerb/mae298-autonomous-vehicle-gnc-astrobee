@@ -11,6 +11,8 @@ services:
       - novnc
     networks:
       - x11
+    volumes:
+      - $PWD/experiments:/root/experiments
   novnc:
     image: theasp/novnc:latest
     environment:
