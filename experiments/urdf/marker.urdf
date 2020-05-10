@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot name="marker">
+    <link name="base_link">
+        <visual>
+        <geometry>
+            <sphere radius="2"/>
+            <!-- <mesh filename="package://experiments/worlds/armarker_40.stl"/> -->
+        </geometry>
+        </visual>
+    </link>
+</robot>

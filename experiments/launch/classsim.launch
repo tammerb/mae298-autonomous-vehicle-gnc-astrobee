@@ -1,0 +1,28 @@
+<launch>
+
+<!-- Adding in the marker -->
+<!-- <arg name="ns" value="marker"/>
+<group ns="$(arg ns)">
+  <arg name="pose" default="9.7 -9.79 5 0 0 0 0" />
+  <param name="robot_description" command="$(find xacro)/xacro experiments/worlds/marker.urdf" />
+  <node name="spawn_marker" pkg="astrobee_gazebo" type="spawn_model" args="-param /$(arg ns)/robot_description -urdf -model $(arg ns) -pose $(arg pose)" />
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />
+</group> -->
+
+<!-- The original launch file! -->
+  <!-- <include file="$(find astrobee)/launch/sim.launch">
+    <arg name="dds" value="false"/>
+    <arg name="robot" value="sim_pub"/>
+    <arg name="rviz" value="true"/>
+    <arg name="sviz" value="false"/>
+  </include>
+</launch> -->
+
+  <arg name="model" default="experiments/worlds/marker.urdf"/>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="" output="screen"/>
+
+</launch>
