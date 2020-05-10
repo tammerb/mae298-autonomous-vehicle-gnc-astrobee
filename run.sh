@@ -1,23 +1,34 @@
 #!/bin/bash
+CAM_CONFIG=/root/myfreeflyer/astrobee/config/simulation/simulation.config
+SETUP=/root/freeflyer_build/native/devel/setup.bash
 
 docker container stop $(docker container ls -aq)
 
 docker-compose up -d
 
-sleep 1
+for arg in "$@"
+do
+  case $arg in
+    -c)
+    docker exec -d astrobee_sim_container /bin/bash -c "sed -i 's/nav_cam_rate = 0.0/nav_cam_rate = 1.0/' $CAM_CONFIG \
+    && sed -i 's/dock_cam_rate = 0.0/dock_cam_rate = 1.0/' $CAM_CONFIG"
+    echo "Nav and Dock cams will be on."
+    ;;
+    *)
+    echo "Incorrect flag, use '-c' flag to turn cameras on."
+    ;;
+  esac
+done
 
-docker exec -d astrobee_sim_container /bin/bash -c "source /root/freeflyer_build/native/devel/setup.bash \
-&& roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true" || winpty docker exec -d astrobee_sim_container //bin//bash -c "source /root/freeflyer_build/native/devel/setup.bash \
+docker exec -d astrobee_sim_container /bin/bash -c "source $SETUP \
+&& roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true" \
+|| winpty docker exec -d astrobee_sim_container //bin//bash -c "source SETUP \
 && roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true"
 
-echo "Standby. Opening browser interface..."
+echo "Opening browser interface..."
 
-sleep 1
+sleep 2
 
-echo "If browser opens, ignore the following 'command not found' errors"
-
-sleep 1
-
-xdg-open http://localhost:8080/vnc_auto.html &
-open http://localhost:8080/vnc_auto.html &
-start http://localhost:8080/vnc_auto.html &
+xdg-open http://localhost:8080/vnc_auto.html \
+|| start http://localhost:8080/vnc_auto.html \
+|| open http://localhost:8080/vnc_auto.html
