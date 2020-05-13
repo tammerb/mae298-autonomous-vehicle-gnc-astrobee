@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   os:
-    image: thbarkouki/astrobee:built
+    image: thbarkouki/ros-astrobee:latest
     container_name: astrobee_sim_container
     stdin_open: true
     tty: true
