@@ -7,8 +7,8 @@ services:
     tty: true
     volumes:
       - type: bind
-        source: ./bagdata
-        target: ~/myfreeflyer
+        source: ./bag
+        target: /root/bag
     environment:
       - DISPLAY=novnc:0.0
     depends_on:
