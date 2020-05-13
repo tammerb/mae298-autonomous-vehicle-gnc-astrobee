@@ -9,6 +9,7 @@ services:
       - type: bind
         source: ./bag
         target: /root/bag
+      - $PWD/experiments:/root/experiments
     environment:
       - DISPLAY=novnc:0.0
     depends_on:
