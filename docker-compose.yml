@@ -2,7 +2,6 @@ version: '2'
 services:
   os:
     image: thbarkouki/astrobee:built
-    # command: /bin/bash -c "source /root/freeflyer_build/native/devel/setup.bash"
     container_name: astrobee_sim_container
     stdin_open: true
     tty: true
