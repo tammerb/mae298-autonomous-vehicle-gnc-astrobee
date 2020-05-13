@@ -34,3 +34,8 @@ RUN cd $HOME/freeflyer_build/native \
 && make -j 4
 
 RUN echo "source /root/freeflyer_build/native/devel/setup.bash" >> /root/.bashrc
+
+# The locale isn't set while using vscode remote-containers. I don't see any locale management in astrobee, so I'm going to set it last not to break anything
+# I was getting an error when the gazebo spawner started about locales
+ENV LANG en_US.UTF-8
+ENV LC_ALL C.UTF-8
