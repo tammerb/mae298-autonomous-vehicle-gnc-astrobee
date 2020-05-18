@@ -1,6 +1,6 @@
 #!/bin/bash
-CAM_CONFIG=/root/myfreeflyer/astrobee/config/simulation/simulation.config
-SETUP=/root/freeflyer_build/native/devel/setup.bash
+CAM_CONFIG=$HOME/../astrobee/astrobee/config/simulation/simulation.config
+SETUP=$HOME/freeflyer_build/native/devel/setup.bash
 
 docker container stop $(docker container ls -aq)
 
@@ -22,7 +22,7 @@ done
 
 docker exec -d astrobee_sim_container /bin/bash -c "source $SETUP \
 && roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true" \
-|| winpty docker exec -d astrobee_sim_container //bin//bash -c "source SETUP \
+|| winpty docker exec -d astrobee_sim_container //bin//bash -c "source $SETUP \
 && roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true"
 
 echo "Opening browser interface..."
