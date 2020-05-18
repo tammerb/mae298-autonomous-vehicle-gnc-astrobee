@@ -3,8 +3,7 @@
     <link name="base_link">
         <visual>
         <geometry>
-            <sphere radius="2"/>
-            <!-- <mesh filename="package://experiments/worlds/armarker_40.stl"/> -->
+            <mesh filename="package://marker/urdf/armarker_40.dae"/>
         </geometry>
         </visual>
     </link>
