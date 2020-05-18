@@ -1,6 +1,6 @@
 #!/bin/bash
-CAM_CONFIG=/root/myfreeflyer/astrobee/config/simulation/simulation.config
-SETUP=/root/freeflyer_build/native/devel/setup.bash
+CAM_CONFIG=$HOME/../astrobee/astrobee/config/simulation/simulation.config
+SETUP=$HOME/freeflyer_build/native/devel/setup.bash
 
 docker container stop $(docker container ls -aq)
 
