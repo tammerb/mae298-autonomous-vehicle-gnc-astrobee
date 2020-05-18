@@ -22,7 +22,7 @@ done
 
 docker exec -d astrobee_sim_container /bin/bash -c "source $SETUP \
 && roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true" \
-|| winpty docker exec -d astrobee_sim_container //bin//bash -c "source SETUP \
+|| winpty docker exec -d astrobee_sim_container //bin//bash -c "source $SETUP \
 && roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true"
 
 echo "Opening browser interface..."
