@@ -1,0 +1,7 @@
+<launch>
+
+  <arg name="marker_pose" default="9.7 9.79 -4 0 0 0 0" />
+  <param name="marker_description" command="$(find xacro)/xacro --inorder $(find marker)/urdf/marker.urdf" />
+  <node pkg="marker" type="marker_node" name="marker_node"/>
+
+</launch>
