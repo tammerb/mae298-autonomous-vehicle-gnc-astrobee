@@ -1,6 +1,8 @@
 #!/bin/bash
 CAM_CONFIG=/astrobee/astrobee/config/simulation/simulation.config
 SETUP=/root/freeflyer_build/native/devel/setup.bash
+LAUNCH="roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true"
+RVIZ=TRUE
 
 docker container stop $(docker container ls -aq)
 
@@ -14,16 +16,26 @@ do
     && sed -i 's/dock_cam_rate = 0.0/dock_cam_rate = 1.0/' $CAM_CONFIG"
     echo "Nav and Dock cams will be on."
     ;;
-    *)
-    echo "Incorrect flag, use '-c' flag to turn cameras on."
+    -s)
+    LAUNCH="roslaunch astrobee sim.launch dds:=false robot:=sim_pub sviz:=true"
+    RVIZ=FALSE
+    echo "Launching with the gazebo GUI."
     ;;
+    -g)
+    LAUNCH="roslaunch astrobee sim.launch dds:=false robot:=sim_pub gviz:=true"
+    RVIZ=FALSE
+    echo "Launching with the GNC GUI."
   esac
 done
 
+if [ "$RVIZ" = TRUE ] ; then
+    echo "Launching with the Rviz GUI."
+fi
+
 docker exec -d astrobee_sim_container /bin/bash -c "source $SETUP \
-&& roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true" \
+&& $LAUNCH" \
 || winpty docker exec -d astrobee_sim_container //bin//bash -c "source $SETUP \
-&& roslaunch astrobee sim.launch dds:=false robot:=sim_pub rviz:=true"
+&& $LAUNCH"
 
 echo "Opening browser interface..."
 
