@@ -24,11 +24,14 @@ Check that the pull was successful with the `docker images` command.
 ### Run the Simulator:
 Run the simulator with by executing the `run.sh` script, e.g with:
 ```
-./run.sh
+./run.sh [OPTIONS]
 ```
 (maybe require `sudo`)
 
-The NavCam and DockCam views are off by default. Add the `-c` flag to turn them on for debugging (resource intensive). 
+The NavCam and DockCam views are off by default. Add the `-c` flag to turn them on for debugging (resource intensive).
+The default viewer is Rviz. Use the `-s` flag for Gazebo, or `-g` flag for GNC GUI.
+See details here:
+https://github.com/nasa/astrobee/tree/972b78b6651e87a634f7ae99a3b12aea860053f1/simulation#running-the-simulator
 
 A browser tab should automatically open at http://localhost:8080/vnc_auto.html. If not, manually enter this address into your browser.
 See below for **Flying Astrobee** instructions.
