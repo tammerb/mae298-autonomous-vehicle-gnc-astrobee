@@ -16,7 +16,7 @@ cd ros-astrobee/
 ### Pull the Docker image
 Pull the pre-built Docker image (*note: the compressed image is ~1.5GB and 6GB once extracted*):
 ```
-docker pull thbarkouki/astrobee:built
+docker pull thbarkouki/ros-astrobee:latest
 ```
 
 Check that the pull was successful with the `docker images` command.
