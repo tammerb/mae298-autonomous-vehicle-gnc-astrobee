@@ -36,25 +36,19 @@ https://github.com/nasa/astrobee/tree/972b78b6651e87a634f7ae99a3b12aea860053f1/s
 A browser tab should automatically open at http://localhost:8080/vnc_auto.html. If not, manually enter this address into your browser.
 See below for **Flying Astrobee** instructions.
 
-Once you're done, close the browsers tab, exit the terminal you're controlling the Astrobee from with `exit`, and stop and remove both containers with `docker-compose down` in the original terminal you started in.
+Once you're done, close the browsers tab, (if you attached to the running container, exit the terminal you're controlling the Astrobee from with `exit`), and stop and remove both containers with `docker-compose down` in the original terminal you started in.
 
 ### Interacting with Astrobee
-In a new terminal from the one you launched the sim from, enter (aka attach to) the docker container and source the ros commands with:
+To control the Astrobee robot, you need to enter (aka "attach to") the docker container with:
 ```
 docker attach astrobee_sim_container
-source /root/freeflyer_build/native/devel/setup.bash
 ```
-
-Now you should be able to "tele-operate" the astrobee using the teleop instructions available from the original Astrobee repo here:
-https://github.com/nasa/astrobee/blob/972b78b6651e87a634f7ae99a3b12aea860053f1/management/executive/teleop_tool.md
-
 To launch additional bash sessions attached to the same container, from a different terminal execute:
 ```
 docker exec -it astrobee_sim_container bash
 ```
+Now you should be able to "tele-operate" the Astrobee using the teleop instructions available from the original Astrobee repo here:
+https://github.com/nasa/astrobee/blob/972b78b6651e87a634f7ae99a3b12aea860053f1/management/executive/teleop_tool.md
 
 #### *For testing only:* This will start the containers (and install the image if needed), but not launch the sim:
 Run `run_no_launch.sh`. This will start both the astrobee and noVNC containers, but will not launch the sim. You can open a second terminal and attach to the sim container by running `docker attach astrobee_sim_container`. You can then edit and launch the sim from inside. Exit the container with `exit`, and stop and remove both containers with `docker-compose down`.
-
-## Instructions to build an astrobee simulator:
-*coming soon*
