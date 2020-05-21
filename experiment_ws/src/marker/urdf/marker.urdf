@@ -1,10 +1,18 @@
 <?xml version="1.0"?>
-<robot name="marker">
-    <link name="base_link">
+<robot name="marker" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <link name="base_link" type="fixed">
         <visual>
-        <geometry>
-            <mesh filename="package://marker/urdf/armarker_40.dae"/>
-        </geometry>
+            <geometry>
+                <mesh filename="package://marker/urdf/armarker_40.dae"/>
+            </geometry>
         </visual>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="1"/>
+            <inertia
+                ixx="1.0" ixy="0.0" ixz="0.0"
+                iyy="1.0" iyz="0.0"
+                izz="1.0"/>
+        </inertial>
     </link>
 </robot>
