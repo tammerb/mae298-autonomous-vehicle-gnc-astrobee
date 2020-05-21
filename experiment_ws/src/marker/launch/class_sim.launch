@@ -1,13 +1,13 @@
 <launch>
-<!-- Adding in the marker -->
-
-  <include file="$(find marker)/launch/marker.launch"></include>
-
-<!-- The original launch file! -->
+  <!-- The original launch file! -->
   <include file="$(find astrobee)/launch/sim.launch">
     <arg name="dds" value="false"/>
     <arg name="robot" value="sim_pub"/>
-    <arg name="rviz" value="true"/>
-    <arg name="sviz" value="false"/>
+    <arg name="rviz" value="false"/>
+    <arg name="sviz" value="true"/>
   </include>
+
+  <!-- Adding in the marker -->
+  <include file="$(find marker)/launch/marker.launch"></include>
+
 </launch>

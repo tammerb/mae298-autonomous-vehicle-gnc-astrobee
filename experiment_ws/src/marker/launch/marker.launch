@@ -1,7 +1,13 @@
 <launch>
 
-  <arg name="marker_pose" default="9.7 9.79 -4 0 0 0 0" />
+  <!-- Spawn into rviz -->
   <param name="marker_description" command="$(find xacro)/xacro --inorder $(find marker)/urdf/marker.urdf" />
   <node pkg="marker" type="marker_node" name="marker_node"/>
+
+  <!-- Spawn into Gazebo -->
+  <arg name="marker_x" default="11" />
+  <arg name="marker_y" default="-5" /> <!-- The origin fram is defined differently in rviz -->
+  <arg name="marker_z" default="5" />
+  <node name="spawn_marker" pkg="gazebo_ros" type="spawn_model" args="-param marker_description -urdf -model marker -x $(arg marker_x) -y $(arg marker_y) -z $(arg marker_z)" />
 
 </launch>
