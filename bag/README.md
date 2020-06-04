@@ -1,1 +1,1 @@
-bindmounted directory to store rosbag data
+bindmounted directory to store rosbag data.
