@@ -70,6 +70,17 @@ int main(int argc, char** argv) {
         float y = -5.0 + thisrow.at(1);
         float z = 5.0 + thisrow.at(2);
 
+        joint_state.name.resize(3);
+        joint_state.position.resize(3);
+
+        // uber NASA HAcKy
+        joint_state.name[0] = "x";
+        joint_state.position[0] = x;
+        joint_state.name[1] = "y";
+        joint_state.position[1] = y;
+        joint_state.name[2] = "z";
+        joint_state.position[2] = z;
+
         //report for rviz
         odom_trans.header.stamp = ros::Time::now();
         odom_trans.transform.translation.x = x;
