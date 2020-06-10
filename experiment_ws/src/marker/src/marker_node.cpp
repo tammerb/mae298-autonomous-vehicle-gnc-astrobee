@@ -4,6 +4,7 @@
 #include <tf/transform_broadcaster.h>
 #include <gazebo_msgs/ModelState.h>
 #include <gazebo_msgs/SetModelState.h>
+#include <std_msgs/Float32MultiArray.h>
 
 // file operations
 #include <fstream>
@@ -15,6 +16,9 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "marker_node");
     ros::NodeHandle n;
     ros::Publisher joint_pub = n.advertise<sensor_msgs::JointState>("joint_states", 1);
+
+    ros::Publisher marker_loc_pub = n.advertise<std_msgs::Float32MultiArray>("marker_locs", 1000);
+
     tf::TransformBroadcaster broadcaster;
     ros::Rate loop_rate(60); // from Casey. Jason thinks its a tad fast
     ros::Duration half_sec(0.5);
@@ -58,6 +62,8 @@ int main(int argc, char** argv) {
     odom_trans.header.frame_id = "rviz";
     odom_trans.child_frame_id = "base_link";
 
+    std_msgs::Float32MultiArray marker_loc;
+
     while (ros::ok()) {
         //update joint_state
         joint_state.header.stamp = ros::Time::now();
@@ -72,6 +78,15 @@ int main(int argc, char** argv) {
 
         joint_state.name.resize(3);
         joint_state.position.resize(3);
+
+
+        // set marker locations to publish
+        // first clear the array
+        marker_loc.data.clear();
+
+        marker_loc.data.push_back(x);
+        marker_loc.data.push_back(y);
+        marker_loc.data.push_back(z);
 
         // uber NASA HAcKy
         joint_state.name[0] = "x";
@@ -127,6 +142,9 @@ int main(int argc, char** argv) {
         //send the joint state and transform
         joint_pub.publish(joint_state);
         broadcaster.sendTransform(odom_trans);
+
+        // publish the marker locs
+        marker_loc_pub.publish(marker_loc);
 
         // This will adjust as needed per iteration
         loop_rate.sleep();

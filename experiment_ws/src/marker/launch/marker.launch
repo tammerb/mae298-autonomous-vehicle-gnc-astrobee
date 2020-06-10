@@ -10,6 +10,6 @@
   <node name="spawn_marker" pkg="gazebo_ros" type="spawn_model" args="-param marker_description -urdf -model marker -x $(arg marker_x) -y $(arg marker_y) -z $(arg marker_z)" />
 
   <!-- Move the marker around-->
-  <node name="move_marker" pkg="marker" type="marker_node" />
+  <node name="move_marker_node" pkg="marker" type="marker_node" />
 
 </launch>

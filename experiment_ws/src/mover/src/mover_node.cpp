@@ -1,5 +1,5 @@
-#include <string>
 #include <ros/ros.h>
+#include <PublisherSubscriber.h>
 #include <ff_msgs/AckCompletedStatus.h>
 #include <ff_msgs/AckStamped.h>
 #include <ff_msgs/AckStatus.h>
@@ -12,7 +12,7 @@
 #include <ff_msgs/FaultState.h>
 #include <ff_msgs/MotionAction.h>
 #include <ff_msgs/PerchState.h>
-#include <sensor_msgs/JointState.h>
+#include <std_msgs/Float32MultiArray.h>
 
 // file operations
 #include <fstream>
@@ -20,8 +20,6 @@
 #include <iostream>
 using namespace std;
 
-
-///// some helper sub functions:
 void MoveFeedbackCallback(ff_msgs::MotionActionFeedbackConstPtr const& fb) {
   std::cout << '\r' << std::flush;
   std::cout << std::fixed << std::setprecision(2)
@@ -35,6 +33,7 @@ void MoveFeedbackCallback(ff_msgs::MotionActionFeedbackConstPtr const& fb) {
 }
 
 void AckCallback(ff_msgs::AckStampedConstPtr const& ack) {
+  ROS_INFO("\n Checking Ack\n");
   if (ack->completed_status.status == ff_msgs::AckCompletedStatus::NOT) {
     return;
   } else if (ack->completed_status.status == ff_msgs::AckCompletedStatus::OK) {
@@ -55,36 +54,70 @@ void AckCallback(ff_msgs::AckStampedConstPtr const& ack) {
   }
 }
 
-static float pos[3];
+// specialize the subscriber callback
+template<>
+void PublisherSubscriber<ff_msgs::CommandStamped, std_msgs::Float32MultiArray>::subscriberCallback(const std_msgs::Float32MultiArray::ConstPtr& recievedMsg) {
+  
+  std::cout << "I've recieved the HACKEY-AF message:" << recievedMsg->data[0] << "\n";
 
-void JointStatesCallback(sensor_msgs::JointState::ConstPtr const& joint_state) {
-    float x = joint_state->position[0];
-    float y = joint_state->position[1];
-    float z = joint_state->position[2];
-    std::cout << "IN THE JOINT CALLBACK"
+  // construct a move command message
+  ff_msgs::CommandStamped movecommand;
 
-    pos[0] = x;
-    pos[1] = y;
-    pos[2] = z;
-    std::cout << "In JS Callback";
-    return;
+  /// move ///
+  movecommand.header.stamp = ros::Time::now();
+  movecommand.subsys_name = "Astrobee";
+  movecommand.cmd_name = ff_msgs::CommandConstants::CMD_NAME_SIMPLE_MOVE6DOF;
+  movecommand.cmd_id = ff_msgs::CommandConstants::CMD_NAME_SIMPLE_MOVE6DOF;
+
+  // move command has 4 args
+  movecommand.args.resize(4);
+  movecommand.args[0].data_type = ff_msgs::CommandArg::DATA_TYPE_STRING;
+
+  // not sure what any of these are but they don't seem to change
+  movecommand.args[0].b = false;
+  movecommand.args[0].d = 0.0;
+  movecommand.args[0].f = 0.0;
+  movecommand.args[0].i = 0;
+  movecommand.args[0].ll = 0;
+
+  // sending coords in ISS_world frame, not relative
+  movecommand.args[0].s = "world";
+  // movecommand.args[0].s = "body";   // if doing relative work
+
+  // set the new coords to move to
+  movecommand.args[1].data_type = ff_msgs::CommandArg::DATA_TYPE_VEC3d;
+  //movecommand.args[1].vec3d[0] = vec_pos_x;
+  //movecommand.args[1].vec3d[1] = vec_pos_y;
+  //movecommand.args[1].vec3d[2] = vec_pos_z;
+  movecommand.args[1].vec3d[0] = 11.111;
+  movecommand.args[1].vec3d[1] = -5.555;
+  movecommand.args[1].vec3d[2] = -4.444;
+
+  // Set tolerance. Currently not used but needs to be in the command
+  movecommand.args[2].data_type = ff_msgs::CommandArg::DATA_TYPE_VEC3d;
+  movecommand.args[2].vec3d[0] = 0;
+  movecommand.args[2].vec3d[1] = 0;
+  movecommand.args[2].vec3d[2] = 0;
+
+  // rotation stuff, might need to specify since we're in world (absolute) mode not relative.
+  movecommand.args[3].data_type = ff_msgs::CommandArg::DATA_TYPE_MAT33f;
+  movecommand.args[3].mat33f[0] = 0;
+  movecommand.args[3].mat33f[1] = 0;
+  movecommand.args[3].mat33f[2] = 0;
+  movecommand.args[3].mat33f[3] = 1;
+
+  publisherObject.publish(movecommand);
+
 }
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "move_node");
+    ros::init(argc, argv, "mover_node");
+    
     ros::NodeHandle n;
-    ros::Publisher cmd_pub = n.advertise<ff_msgs::CommandStamped>("command", 10, true);
-
-    ros::Duration half_sec(0.5);
-
-
-    // subscribe to stuff
-    ros::Subscriber ack_sub, move_sub, marker_sub;
+    ros::Subscriber ack_sub, move_sub;
     ack_sub = n.subscribe("mgt/ack", 10, &AckCallback);
     move_sub = n.subscribe("mob/motion/feedback", 10, &MoveFeedbackCallback);
-    marker_sub = n.subscribe("joint_states", 1000, &JointStatesCallback);
-    marker_sub.
     
     int count = 0;
     while (ack_sub.getNumPublishers() == 0) {
@@ -98,76 +131,12 @@ int main(int argc, char **argv)
         count++;
     }
 
+    
     while (ros::ok()) {
-        // message declarations
-        // ff_msgs::CommandStamped stopcommand;
-        ff_msgs::CommandStamped movecommand;
-
-        // get x, y, z from  "middle of the JEM":
-        float vec_pos_x = pos[0];
-        float vec_pos_y = pos[1];
-        float vec_pos_z = pos[2];
-
-        std::cout << "Commanded Position:\n";
-        std::cout << "x: " << vec_pos_x << "\n";
-        std::cout << "y: " << vec_pos_y << "\n";
-        std::cout << "z: " << vec_pos_z << "\n";
-
-        //update FLAGS_move) {
-        // stopcommand.header.stamp = ros::Time::now();
-        // stopcommand.subsys_name = "Astrobee";
-
-        /// stop ///
-        // stopcommand.cmd_name = ff_msgs::CommandConstants::CMD_NAME_STOP_ALL_MOTION;
-        // stopcommand.cmd_id = ff_msgs::CommandConstants::CMD_NAME_STOP_ALL_MOTION;
-        /////////////////////////////
-        /// move ///
-        movecommand.header.stamp = ros::Time::now();
-        movecommand.subsys_name = "Astrobee";
-        movecommand.cmd_name = ff_msgs::CommandConstants::CMD_NAME_SIMPLE_MOVE6DOF;
-        movecommand.cmd_id = ff_msgs::CommandConstants::CMD_NAME_SIMPLE_MOVE6DOF;
-
-        // move command has 4 args
-        movecommand.args.resize(4);
-        movecommand.args[0].data_type = ff_msgs::CommandArg::DATA_TYPE_STRING;
-
-        // not sure what any of these are but they don't seem to change
-        movecommand.args[0].b = false;
-        movecommand.args[0].d = 0.0;
-        movecommand.args[0].f = 0.0;
-        movecommand.args[0].i = 0;
-        movecommand.args[0].ll = 0;
-
-        // sending coords in ISS_world frame, not relative
-        movecommand.args[0].s = "world";
-        // movecommand.args[0].s = "body";   // if doing relative work
-
-        // set the new coords to move to
-        movecommand.args[1].data_type = ff_msgs::CommandArg::DATA_TYPE_VEC3d;
-        movecommand.args[1].vec3d[0] = vec_pos_x;
-        movecommand.args[1].vec3d[1] = vec_pos_y;
-        movecommand.args[1].vec3d[2] = vec_pos_z;
-
-        // Set tolerance. Currently not used but needs to be in the command
-        movecommand.args[2].data_type = ff_msgs::CommandArg::DATA_TYPE_VEC3d;
-        movecommand.args[2].vec3d[0] = 0;
-        movecommand.args[2].vec3d[1] = 0;
-        movecommand.args[2].vec3d[2] = 0;
-
-        // rotation stuff, might need to specify since we're in world (absolute) mode not relative.
-        movecommand.args[3].data_type = ff_msgs::CommandArg::DATA_TYPE_MAT33f;
-        movecommand.args[3].mat33f[0] = 0;
-        movecommand.args[3].mat33f[1] = 0;
-        movecommand.args[3].mat33f[2] = 0;
-        movecommand.args[3].mat33f[3] = 1;
-
-        //send the move command
-        // move_pub.publish(stopcommand);
-        cmd_pub.publish(movecommand);
-
-        std::cout << "\nStarted " << movecommand.cmd_id << " command. We are HACKYING IT";
-        half_sec.sleep();
+      PublisherSubscriber<ff_msgs::CommandStamped, std_msgs::Float32MultiArray> seeAndMove("command", "marker_locs", 1);
     }
+    
 
-    return 0;
+    
+    // ros::spin();
 }

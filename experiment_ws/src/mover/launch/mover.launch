@@ -1,6 +1,6 @@
 <launch>
   <!-- Move astrobee around-->
-  <node name="move_astrobee" pkg="mover" type="mover_node" output="screen"/>
+  <node name="astrobee_mover_node" pkg="mover" type="mover_node" output="screen"/>
   
 
 </launch>
