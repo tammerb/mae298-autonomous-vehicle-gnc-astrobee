@@ -1,5 +1,6 @@
 #include <string>
 #include <ros/ros.h>
+#include <math.h>
 #include <sensor_msgs/JointState.h>
 #include <tf/transform_broadcaster.h>
 #include <gazebo_msgs/ModelState.h>
@@ -35,7 +36,7 @@ int main(int argc, char** argv) {
     gazebo_msgs::SetModelState model_state_srv_msg;
 
     // read csv
-    std::ifstream  data ("/experiment_ws/src/shoulderdata.csv", std::ifstream::in);
+    std::ifstream  data ("/experiment_ws/src/newshoulderdata.csv", std::ifstream::in);
     std::string line;
     std::vector<std::vector<float> > parsedCsv;
     while(std::getline(data,line))
@@ -71,9 +72,12 @@ int main(int argc, char** argv) {
         // update transform
         // here we can vary the position of the marker with time
         // The constants are the middle of the jem
+        float marker_time = ros::Time::now().toSec() * 3.14 / 60.0; // period of 1 minute
+        float marker_bigmove = 3*cos(marker_time); //3 meter amplitude
+        // shoulder noise
         std::vector<float> thisrow = parsedCsv.at(currentpoint);
-        float x = 11.0 + thisrow.at(0);
-        float y = -5.0 + thisrow.at(1);
+        float x = 11.2 + thisrow.at(0);
+        float y = -5.0 + thisrow.at(1) + marker_bigmove;
         float z = 5.0 + thisrow.at(2);
 
         joint_state.name.resize(3);
