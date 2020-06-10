@@ -35,6 +35,7 @@ void MoveFeedbackCallback(ff_msgs::MotionActionFeedbackConstPtr const& fb) {
 void AckCallback(ff_msgs::AckStampedConstPtr const& ack) {
   ROS_INFO("\n Checking Ack\n");
   if (ack->completed_status.status == ff_msgs::AckCompletedStatus::NOT) {
+    ROS_INFO("\n Ack pinging completed status, not completed.\n");
     return;
   } else if (ack->completed_status.status == ff_msgs::AckCompletedStatus::OK) {
     std::cout << "\n" << ack->cmd_id << " command completed successfully!\n";
@@ -43,13 +44,13 @@ void AckCallback(ff_msgs::AckStampedConstPtr const& ack) {
     std::cout << "\n" << ack->cmd_id << " command was cancelled. This may have";
     std::cout << " been due to a fault in the system or if someone had issued ";
     std::cout << "another command. Aborting!\n";
-    ros::shutdown();
+    // ros::shutdown();
     return;
   } else {
     // Command failed due to bad syntax or an actual failure
     std::cout << "\n" << ack->cmd_id << " command failed! " << ack->message;
     std::cout << "\n";
-    ros::shutdown();
+    // ros::shutdown();
     return;
   }
 }
@@ -87,11 +88,11 @@ void PublisherSubscriber<ff_msgs::CommandStamped, std_msgs::Float32MultiArray>::
   // set the new coords to move to
   movecommand.args[1].data_type = ff_msgs::CommandArg::DATA_TYPE_VEC3d;
   //movecommand.args[1].vec3d[0] = vec_pos_x;
-  //movecommand.args[1].vec3d[1] = vec_pos_y;
-  //movecommand.args[1].vec3d[2] = vec_pos_z;
-  movecommand.args[1].vec3d[0] = 11.111;
+  //movecommand.args[1].vec3d[1] = recievedMsg->data[2];
+  //movecommand.args[1].vec3d[2] = recievedMsg->data[3];
+  movecommand.args[1].vec3d[0] = recievedMsg->data[0];
   movecommand.args[1].vec3d[1] = -5.555;
-  movecommand.args[1].vec3d[2] = -4.444;
+  movecommand.args[1].vec3d[2] = 4.444;
 
   // Set tolerance. Currently not used but needs to be in the command
   movecommand.args[2].data_type = ff_msgs::CommandArg::DATA_TYPE_VEC3d;
@@ -107,7 +108,9 @@ void PublisherSubscriber<ff_msgs::CommandStamped, std_msgs::Float32MultiArray>::
   movecommand.args[3].mat33f[3] = 1;
 
   publisherObject.publish(movecommand);
-
+  // std::cout << "Sleeping for 10s.\n\n";
+  // ros::Duration(10).sleep();
+  // std::cout << "Doen sleeping.\n\n";
 }
 
 int main(int argc, char **argv)
@@ -116,27 +119,28 @@ int main(int argc, char **argv)
     
     ros::NodeHandle n;
     ros::Subscriber ack_sub, move_sub;
+    std::cout << "Constructing the ack_sub\n";
     ack_sub = n.subscribe("mgt/ack", 10, &AckCallback);
     move_sub = n.subscribe("mob/motion/feedback", 10, &MoveFeedbackCallback);
     
+
     int count = 0;
     while (ack_sub.getNumPublishers() == 0) {
-        ros::Duration(0.2).sleep();
+      std::cout << "In the ack_sub getnum while loop.\n\n";
+       ros::Duration(0.2).sleep();
         // Only wait 2 seconds
         if (count == 9) {
-            std::cout << "No publisher for acks topics. This tool will not work ";
-            std::cout << "without this.\n\n";
-            return 1;
-        }
-        count++;
+          std::cout << "No publisher for acks topics. This tool will not work ";
+          std::cout << "without this.\n\n";
+          return 1;
+       }
+       count++;
     }
 
-    
-    while (ros::ok()) {
-      PublisherSubscriber<ff_msgs::CommandStamped, std_msgs::Float32MultiArray> seeAndMove("command", "marker_locs", 1);
-    }
+
+    PublisherSubscriber<ff_msgs::CommandStamped, std_msgs::Float32MultiArray> seeAndMove("command", "marker_locs", 1);
     
 
     
-    // ros::spin();
+    ros::spin();
 }
