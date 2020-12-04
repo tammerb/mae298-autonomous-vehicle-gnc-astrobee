@@ -1,4 +1,3 @@
-# ros-astrobee
 #### A Docker Image and run scripts for NASA's Astrobee Robot Software
 (Astrobee source code available at https://github.com/nasa/astrobee/tree/972b78b6651e87a634f7ae99a3b12aea860053f1)
 
